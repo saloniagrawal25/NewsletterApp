@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/signup.html");
+  res.sendFile(__dirname + "/src/components/signup.html");
 })
 app.post("/", function (req, res) {
   var fName = req.body.firstName;
@@ -30,18 +30,18 @@ app.post("/", function (req, res) {
     url: "https://" + process.env.API_URL,
     method: "POST",
     headers: {
-      "Authorization": "saloni" + process.env.AUTHORIZATION_KEY
+      "Authorization": "saloni " + process.env.AUTHORIZATION_KEY
     },
     body: jsonData
   }
   request(options, function (error, response, body) {
     if (error) {
-      res.sendFile(__dirname + "/failure.html");
+      res.sendFile(__dirname + "/src/components/failure.html");
     } else {
       if (response.statusCode == 200) {
-        res.sendFile(__dirname + "/success.html");
+        res.sendFile(__dirname + "/src/components/success.html");
       } else {
-        res.sendFile(__dirname + "/failure.html");
+        res.sendFile(__dirname + "/src/components/failure.html");
       }
     }
   })
