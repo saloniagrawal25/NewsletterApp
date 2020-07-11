@@ -1,15 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
+const dotenv = require('dotenv');
 var app = express();
+dotenv.config();
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(express.static("public"));
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.sendFile(__dirname + "/signup.html");
 })
-app.post("/", function(req, res) {
+app.post("/", function (req, res) {
   var fName = req.body.firstName;
   var lName = req.body.lastName;
   var email = req.body.email;
@@ -25,14 +27,14 @@ app.post("/", function(req, res) {
   }
   var jsonData = JSON.stringify(data);
   var options = {
-    url: 'https://us4.api.mailchimp.com/3.0/lists/b6dd44a2f9',
+    url: "https://" + process.env.API_URL,
     method: "POST",
     headers: {
-      "Authorization": "saloni 068c83efc54d058540bbe7181ab8ff8c-us4"
+      "Authorization": "saloni" + process.env.AUTHORIZATION_KEY
     },
     body: jsonData
   }
-  request(options, function(error, response, body) {
+  request(options, function (error, response, body) {
     if (error) {
       res.sendFile(__dirname + "/failure.html");
     } else {
@@ -44,15 +46,10 @@ app.post("/", function(req, res) {
     }
   })
 })
-app.post("/failure", function(req, res) {
+app.post("/failure", function (req, res) {
   res.redirect("/");
 })
 
-app.listen( process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 3000, function () {
   console.log("App is listening at port 3000")
 })
-
-
-//068c83efc54d058540bbe7181ab8ff8c-us4
-
-//b6dd44a2f9
